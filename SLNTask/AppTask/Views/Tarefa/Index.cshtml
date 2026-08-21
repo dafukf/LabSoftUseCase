@@ -4,74 +4,90 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="mb-4">Lista de Tarefas</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="/Tarefa/Create" class="btn btn-success text-white">Novo</a>
 </p>
-<table class="table">
-    <thead>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataPlanejada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataIniciada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataFinalizada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataCancelada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusTarefa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prazo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Funcionario)
-            </th>
-            <th></th>
+            <th>Descrição</th>
+            <th>Data Planejada</th>
+            <th>Data Iniciada</th>
+            <th>Data Finalizada</th>
+            <th>Data Cancelada</th>
+            <th>Status</th>
+            <th>Prazo</th>
+            <th>Funcionário</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataPlanejada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataIniciada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataFinalizada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataCancelada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusTarefa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prazo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Funcionario.Nome)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Codigo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Codigo">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Codigo">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Descricao</td>
+                <td>@item.DataPlanejada</td>
+                <td>@item.DataIniciada</td>
+                <td>@item.DataFinalizada</td>
+                <td>@item.DataCancelada</td>
+                <td>@item.StatusTarefa</td>
+                <td>@item.Prazo</td>
+                <td>@item.Funcionario?.Nome</td>
+                <td>
+                    <a href="/Tarefa/Edit/@item.Codigo" class="btn btn-primary btn-sm text-white">Alterar</a>
+                    <a href="/Tarefa/Details/@item.Codigo" class="btn btn-success btn-sm text-white" style="background-color: #006400;">Detalhe</a>
+                    <button type="button" class="btn btn-danger btn-sm text-white" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Codigo" data-descricao="@item.Descricao">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
     </tbody>
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Deseja realmente excluir a tarefa: <strong id="tarefaDescricao"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn-cancel btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <!-- Formulário que dispara o POST de Delete para a Controller -->
+                    <form id="deleteForm" method="post" action="">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        <script>
+            // Script para capturar os dados da linha da tabela e injetar no Modal dinamicamente
+            var deleteModal = document.getElementById('deleteModal');
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; // Botão que acionou o modal
+                var id = button.getAttribute('data-id'); // Extrai o ID
+                var descricao = button.getAttribute('data-descricao'); // Extrai a descrição
+
+                // Atualiza o texto da descrição no corpo do modal
+                var modalDescricaoSpan = deleteModal.querySelector('#tarefaDescricao');
+                modalDescricaoSpan.textContent = descricao;
+
+                // Altera o atributo 'action' do formulário interno para apontar para a rota correta de delete
+                var deleteForm = deleteModal.querySelector('#deleteForm');
+                deleteForm.action = '/Tarefa/Delete/' + id;
+            });
+        </script>
+    }
+
+
+
 </table>

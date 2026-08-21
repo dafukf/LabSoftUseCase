@@ -24,11 +24,6 @@ namespace AppTask.Controllers
             var dbTasksContext = _context.Tarefas.Include(t => t.Funcionario);
             return View(await dbTasksContext.ToListAsync());
         }
-        public async Task<IActionResult> Sobre()
-        {
-
-            return View();
-        }
 
         // GET: Tarefa/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -52,8 +47,7 @@ namespace AppTask.Controllers
         // GET: Tarefa/Create
         public IActionResult Create()
         {
-            ViewData["ListaFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome");
-
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Codigo");
             return View();
         }
 
@@ -70,7 +64,7 @@ namespace AppTask.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ListaFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Codigo", tarefa.FuncionarioId);
             return View(tarefa);
         }
 
@@ -87,7 +81,7 @@ namespace AppTask.Controllers
             {
                 return NotFound();
             }
-            ViewData["CodigoFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Funcionarios, "Codigo", "Codigo", tarefa.FuncionarioId);
             return View(tarefa);
         }
 
@@ -96,7 +90,7 @@ namespace AppTask.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,CodigoFuncionario")] Tarefa tarefa)
+        public async Task<IActionResult> Edit(int id, [Bind("Codigo,Descricao,DataPlanejada,DataIniciada,DataFinalizada,DataCancelada,StatusTarefa,Prazo,FuncionarioId")] Tarefa tarefa)
         {
             if (id != tarefa.Codigo)
             {
@@ -121,9 +115,17 @@ namespace AppTask.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CodigoFuncionario"] = new SelectList(_context.Funcionarios, "Codigo", "Nome", tarefa.FuncionarioId);
+
+            ViewData["FuncionarioId"] = new SelectList(
+                _context.Funcionarios,
+                "Codigo",
+                "Nome",
+                tarefa.FuncionarioId
+            );
+
             return View(tarefa);
         }
 
