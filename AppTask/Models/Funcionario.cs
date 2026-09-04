@@ -13,7 +13,15 @@ public partial class Funcionario
 
     public int DepartamentoId { get; set; }
 
+    public int? CodigoGerente { get; set; }
+
     public virtual Departamento Departamento { get; set; } = null!;
 
-    public virtual ICollection<Tarefa> Tarefas { get; set; } = new List<Tarefa>();
+    public virtual Funcionario? Gerente { get; set; }
+
+    public virtual ICollection<Funcionario> Subordinados { get; set; }
+        = new List<Funcionario>();
+
+    public virtual ICollection<Tarefa> Tarefas { get; set; }
+        = new List<Tarefa>();
 }
