@@ -1,0 +1,150 @@
+﻿@model IEnumerable<AppTask.Models.Tarefa>
+@{
+    ViewData["Title"] = "Tarefas";
+
+    string BadgeClass(string status)
+    {
+        var s = (status ?? "").ToLower();
+        if (s.Contains("inic") || s.Contains("andamento")) return "badge-status badge-status-progress";
+        if (s.Contains("final") || s.Contains("conclu")) return "badge-status badge-status-done";
+        if (s.Contains("cancel")) return "badge-status badge-status-cancelled";
+        return "badge-status badge-status-pending";
+    }
+
+    var total = Model.Count();
+    var emAndamento = Model.Count(t => (t.StatusTarefa?.ToString() ?? "").ToLower().Contains("inic"));
+    var concluidas = Model.Count(t => (t.StatusTarefa?.ToString() ?? "").ToLower().Contains("final") || (t.StatusTarefa?.ToString() ?? "").ToLower().Contains("conclu"));
+    var canceladas = Model.Count(t => (t.StatusTarefa?.ToString() ?? "").ToLower().Contains("cancel"));
+}
+
+<div class="page-header">
+    <div>
+        <h1>Tarefas</h1>
+        <p class="text-muted">Acompanhe e gerencie as tarefas da equipe.</p>
+    </div>
+    <a href="/Tarefa/Create" class="btn btn-success text-white">
+        <i class="bi bi-plus-lg"></i> Nova tarefa
+    </a>
+</div>
+
+<div class="stat-row">
+    <div class="stat-card accent-total">
+        <div class="stat-label"><i class="bi bi-list-check"></i> Total</div>
+        <div class="stat-value">@total</div>
+    </div>
+    <div class="stat-card accent-progress">
+        <div class="stat-label"><i class="bi bi-hourglass-split"></i> Em andamento</div>
+        <div class="stat-value">@emAndamento</div>
+    </div>
+    <div class="stat-card accent-done">
+        <div class="stat-label"><i class="bi bi-check-circle"></i> Concluídas</div>
+        <div class="stat-value">@concluidas</div>
+    </div>
+    <div class="stat-card accent-cancel">
+        <div class="stat-label"><i class="bi bi-x-circle"></i> Canceladas</div>
+        <div class="stat-value">@canceladas</div>
+    </div>
+</div>
+
+<div class="card-panel">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Data Planejada</th>
+                <th>Data Iniciada</th>
+                <th>Data Finalizada</th>
+                <th>Data Cancelada</th>
+                <th>Status</th>
+                <th>Prazo</th>
+                <th>Funcionário</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Descricao</td>
+                    <td>@item.DataPlanejada</td>
+                    <td>@item.DataIniciada</td>
+                    <td>@item.DataFinalizada</td>
+                    <td>@item.DataCancelada</td>
+                    <td><span class="@BadgeClass(item.StatusTarefa ?? "")">@item.StatusTarefa</span></td>
+                    <td>@item.Prazo</td>
+                    <td>@item.Funcionario?.Nome</td>
+                    <td>
+                        <a href="/Tarefa/Edit/@item.Codigo" class="btn btn-primary btn-sm">
+                            Alterar
+                        </a>
+                        <a href="/Tarefa/Details/@item.Codigo" class="btn btn-success btn-sm text-white">
+                            Detalhes
+                        </a>
+                        <button type="button"
+                                class="btn btn-danger btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal"
+                                data-id="@item.Codigo"
+                                data-descricao="@item.Descricao">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal de confirmação de exclusão -->
+<div class="modal fade"
+     id="deleteModal"
+     tabindex="-1"
+     aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    Confirmação de exclusão
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar">
+                </button>
+            </div>
+            <div class="modal-body">
+                Deseja realmente excluir a tarefa
+                <strong id="tarefaDescricao"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <form id="deleteForm" method="post" action="">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        Sim, excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var descricao = button.getAttribute('data-descricao');
+            var modalDescricao = deleteModal.querySelector('#tarefaDescricao');
+            modalDescricao.textContent = descricao;
+            var deleteForm = deleteModal.querySelector('#deleteForm');
+            deleteForm.action = '/Tarefa/Delete/' + id;
+        });
+    </script>
+}

@@ -1,0 +1,18 @@
+@model AppTask.Models.Departamento
+
+@{
+    ViewData["Title"] = "Detalhes do departamento";
+}
+
+<h1>Detalhes do departamento</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Nome</dt>
+    <dd class="col-sm-9">@Model.Nome</dd>
+
+    <dt class="col-sm-3">Sigla</dt>
+    <dd class="col-sm-9">@Model.Sigla</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Codigo" class="btn btn-primary">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

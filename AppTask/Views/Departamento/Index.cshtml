@@ -1,0 +1,56 @@
+@model IEnumerable<AppTask.Models.Departamento>
+@{
+    ViewData["Title"] = "Departamentos";
+    var total = Model.Count();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Departamentos</h1>
+        <p class="text-muted">Setores cadastrados na empresa.</p>
+    </div>
+    <a href="/Departamento/Create" class="btn btn-success text-white">
+        <i class="bi bi-plus-lg"></i> Novo departamento
+    </a>
+</div>
+
+<div class="stat-row">
+    <div class="stat-card accent-total">
+        <div class="stat-label"><i class="bi bi-building"></i> Total de departamentos</div>
+        <div class="stat-value">@total</div>
+    </div>
+</div>
+
+<div class="card-panel">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Sigla</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Codigo</td>
+                    <td>@item.Nome</td>
+                    <td><span class="badge-status badge-status-pending">@item.Sigla</span></td>
+                    <td>
+                        <a href="/Departamento/Edit/@item.Codigo" class="btn btn-primary btn-sm">
+                            Alterar
+                        </a>
+                        <a href="/Departamento/Details/@item.Codigo" class="btn btn-success btn-sm text-white">
+                            Detalhes
+                        </a>
+                        <a href="/Departamento/Delete/@item.Codigo" class="btn btn-danger btn-sm">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

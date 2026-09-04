@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AppTask</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppTask.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    }
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+            <a class="sidebar-brand" asp-controller="Home" asp-action="Index">
+                <span class="sidebar-brand-icon"><i class="bi bi-check2-square"></i></span>
+                <span class="sidebar-brand-text">AppTask</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a class="@(currentController == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-house"></i><span>Início</span>
+                </a>
+                <a class="@(currentController == "Tarefa" ? "active" : "")" asp-controller="Tarefa" asp-action="Index">
+                    <i class="bi bi-list-check"></i><span>Tarefas</span>
+                </a>
+                <a class="@(currentController == "Funcionario" ? "active" : "")" asp-controller="Funcionario" asp-action="Index">
+                    <i class="bi bi-people"></i><span>Funcionários</span>
+                </a>
+                <a class="@(currentController == "Departamento" ? "active" : "")" asp-controller="Departamento" asp-action="Index">
+                    <i class="bi bi-building"></i><span>Departamentos</span>
+                </a>
+                <a class="@(currentController == "Incidentes" ? "active" : "")" asp-controller="Incidentes" asp-action="Index">
+                    <i class="bi bi-exclamation-triangle"></i><span>Incidentes</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                &copy; 2026 AppTask
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            <header class="topbar">
+                <button class="sidebar-toggle d-lg-none" type="button" id="sidebarToggle" aria-label="Abrir menu">
+                    <i class="bi bi-list"></i>
+                </button>
+                <div class="topbar-title">@ViewData["Title"]</div>
+                <div class="topbar-user">
+                    <span class="topbar-avatar">AT</span>
+                </div>
+            </header>
+
+            <main role="main" class="page-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        var toggleBtn = document.getElementById('sidebarToggle');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function () {
+                document.querySelector('.app-shell').classList.toggle('sidebar-open');
+            });
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

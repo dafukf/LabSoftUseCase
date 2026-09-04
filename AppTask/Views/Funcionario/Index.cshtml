@@ -1,0 +1,83 @@
+@model IEnumerable<AppTask.Models.Funcionario>
+@{
+    ViewData["Title"] = "Funcionários";
+
+    var total = Model.Count();
+    var comDepartamento = Model.Count(f => f.Departamento != null);
+    var semDepartamento = total - comDepartamento;
+    var cargos = Model.Select(f => f.Cargo).Where(c => !string.IsNullOrEmpty(c)).Distinct().Count();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Funcionários</h1>
+        <p class="text-muted">Cadastro e gerenciamento da equipe.</p>
+    </div>
+    <a href="/Funcionario/Create" class="btn btn-success text-white">
+        <i class="bi bi-plus-lg"></i> Novo funcionário
+    </a>
+</div>
+
+<div class="stat-row">
+    <div class="stat-card accent-total">
+        <div class="stat-label"><i class="bi bi-people"></i> Total</div>
+        <div class="stat-value">@total</div>
+    </div>
+    <div class="stat-card accent-done">
+        <div class="stat-label"><i class="bi bi-building-check"></i> Com departamento</div>
+        <div class="stat-value">@comDepartamento</div>
+    </div>
+    <div class="stat-card accent-progress">
+        <div class="stat-label"><i class="bi bi-building-dash"></i> Sem departamento</div>
+        <div class="stat-value">@semDepartamento</div>
+    </div>
+    <div class="stat-card accent-total">
+        <div class="stat-label"><i class="bi bi-briefcase"></i> Cargos distintos</div>
+        <div class="stat-value">@cargos</div>
+    </div>
+</div>
+
+<div class="card-panel">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Cargo</th>
+                <th>Departamento</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Codigo</td>
+                    <td>@item.Nome</td>
+                    <td>@item.Cargo</td>
+                    <td>
+                        @if (item.Departamento != null)
+                        {
+                            <span class="badge-status badge-status-pending">@item.Departamento.Nome</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="/Funcionario/Edit/@item.Codigo" class="btn btn-primary btn-sm">
+                            Alterar
+                        </a>
+                        <a href="/Funcionario/Details/@item.Codigo" class="btn btn-success btn-sm text-white">
+                            Detalhes
+                        </a>
+                        <a href="/Funcionario/Delete/@item.Codigo" class="btn btn-danger btn-sm">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

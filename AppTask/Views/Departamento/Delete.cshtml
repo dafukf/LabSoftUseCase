@@ -1,0 +1,30 @@
+@model AppTask.Models.Departamento
+
+@{
+    ViewData["Title"] = "Excluir departamento";
+}
+
+<h1>Excluir departamento</h1>
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-warning">@TempData["Erro"]</div>
+}
+
+<div class="alert alert-danger">
+    Tem certeza de que deseja excluir este departamento?
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Nome</dt>
+    <dd class="col-sm-9">@Model.Nome</dd>
+
+    <dt class="col-sm-3">Sigla</dt>
+    <dd class="col-sm-9">@Model.Sigla</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Codigo" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

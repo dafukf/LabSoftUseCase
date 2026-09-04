@@ -1,0 +1,33 @@
+@model AppTask.Models.Funcionario
+
+@{
+    ViewData["Title"] = "Excluir funcionário";
+}
+
+<h1>Excluir funcionário</h1>
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-warning">@TempData["Erro"]</div>
+}
+
+<div class="alert alert-danger">
+    Tem certeza de que deseja excluir este funcionário?
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Nome</dt>
+    <dd class="col-sm-9">@Model.Nome</dd>
+
+    <dt class="col-sm-3">Cargo</dt>
+    <dd class="col-sm-9">@Model.Cargo</dd>
+
+    <dt class="col-sm-3">Departamento</dt>
+    <dd class="col-sm-9">@Model.Departamento?.Nome</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Codigo" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,84 @@
+﻿@model AppTask.Models.Incidente
+
+@{
+    ViewData["Title"] = "Novo Incidente";
+}
+
+<h1 class="mb-4">Novo Incidente</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Incidentes/Create" method="post">
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="mb-3">
+                <label for="DescricaoProblema" class="form-label">
+                    Descrição do problema
+                </label>
+
+                <input type="text"
+                       id="DescricaoProblema"
+                       name="DescricaoProblema"
+                       value="@Model?.DescricaoProblema"
+                       maxlength="250"
+                       class="form-control"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label for="DataIncidente" class="form-label">
+                    Data do incidente
+                </label>
+
+                <input type="datetime-local"
+                       id="DataIncidente"
+                       name="DataIncidente"
+                       value="@(Model == null ? "" : Model.DataIncidente.ToString("yyyy-MM-ddTHH:mm"))"
+                       class="form-control"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label for="Solucao" class="form-label">
+                    Solução
+                </label>
+
+                <input type="text"
+                       id="Solucao"
+                       name="Solucao"
+                       value="@Model?.Solucao"
+                       maxlength="250"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label for="Resolvido" class="form-label">
+                    Resolvido
+                </label>
+
+                <select id="Resolvido"
+                        name="Resolvido"
+                        class="form-select"
+                        required>
+                    <option value="">Selecione</option>
+                    <option value="sim" selected="@(Model?.Resolvido == "sim" ? "selected" : null)">
+                        Sim
+                    </option>
+                    <option value="nao" selected="@(Model?.Resolvido == "nao" ? "selected" : null)">
+                        Não
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Salvar
+            </button>
+
+            <a href="/Incidentes" class="btn btn-secondary">
+                Voltar
+            </a>
+        </form>
+    </div>
+</div>

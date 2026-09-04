@@ -1,0 +1,69 @@
+@model AppTask.Models.Funcionario
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Novo Funcionário";
+    var listaDepartamentos = ViewBag.DepartamentoId as IEnumerable<SelectListItem>;
+}
+
+<h1 class="mb-4">Novo Funcionário</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Funcionario/Create" method="post">
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="mb-3">
+                <label for="Nome" class="form-label">Nome</label>
+                <input type="text"
+                       id="Nome"
+                       name="Nome"
+                       value="@Model?.Nome"
+                       class="form-control"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label for="Cargo" class="form-label">Cargo</label>
+                <input type="text"
+                       id="Cargo"
+                       name="Cargo"
+                       value="@Model?.Cargo"
+                       class="form-control"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label for="DepartamentoId" class="form-label">Departamento</label>
+
+                <select id="DepartamentoId"
+                        name="DepartamentoId"
+                        class="form-select"
+                        required>
+                    <option value="">Selecione um departamento</option>
+
+                    @if (listaDepartamentos != null)
+                    {
+                        foreach (var departamento in listaDepartamentos)
+                        {
+                            <option value="@departamento.Value"
+                                    selected="@(departamento.Selected ? "selected" : null)">
+                                @departamento.Text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Salvar
+            </button>
+
+            <a href="/Funcionario" class="btn btn-secondary">
+                Voltar
+            </a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+@model AppTask.Models.Departamento
+
+@{
+    ViewData["Title"] = "Novo Departamento";
+}
+
+<h1 class="mb-4">Novo Departamento</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form action="/Departamento/Create" method="post">
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="mb-3">
+                <label for="Nome" class="form-label">
+                    Nome
+                </label>
+
+                <input type="text"
+                       id="Nome"
+                       name="Nome"
+                       value="@Model?.Nome"
+                       maxlength="100"
+                       class="form-control"
+                       required />
+            </div>
+
+            <div class="mb-3">
+                <label for="Sigla" class="form-label">
+                    Sigla
+                </label>
+
+                <input type="text"
+                       id="Sigla"
+                       name="Sigla"
+                       value="@Model?.Sigla"
+                       maxlength="10"
+                       class="form-control"
+                       required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Salvar
+            </button>
+
+            <a href="/Departamento" class="btn btn-secondary">
+                Voltar
+            </a>
+        </form>
+    </div>
+</div>
