@@ -45,6 +45,12 @@ public partial class DbTasksContext : DbContext
         set;
     } = null!;
 
+    public virtual DbSet<CentralDeCusto> CentraisDeCusto
+    {
+        get;
+        set;
+    } = null!;
+
 
    
 
@@ -192,6 +198,22 @@ public partial class DbTasksContext : DbContext
 
 
    
+
+        modelBuilder.Entity<CentralDeCusto>(entity =>
+        {
+            entity.HasKey(e => e.Codigo);
+
+            entity.ToTable("CentralDeCusto");
+
+            entity.Property(e => e.NomeCentral)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+
+            entity.Property(e => e.ValorMetaAnual)
+                .HasColumnType("decimal(18,2)")
+                .HasDefaultValue(0m);
+        });
+
 
         modelBuilder.Entity<Incidente>(entity =>
         {

@@ -1,0 +1,27 @@
+@model AppTask.Models.CentralDeCusto
+
+@{
+    ViewData["Title"] = "Detalhes da central de custo";
+}
+
+<div class="page-header mb-4">
+    <h1>Detalhes da central de custo</h1>
+</div>
+
+<div class="card-panel">
+    <dl class="row mb-0">
+        <dt class="col-sm-4">Código</dt>
+        <dd class="col-sm-8">@Model.Codigo</dd>
+
+        <dt class="col-sm-4">Nome da central</dt>
+        <dd class="col-sm-8">@Model.NomeCentral</dd>
+
+        <dt class="col-sm-4">Meta anual</dt>
+        <dd class="col-sm-8">@Model.ValorMetaAnual.ToString("C2", new System.Globalization.CultureInfo("pt-BR"))</dd>
+    </dl>
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Codigo" class="btn btn-primary">Alterar</a>
+        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    </div>
+</div>

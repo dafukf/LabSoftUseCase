@@ -9,6 +9,7 @@ GO
 
 -- ATENÇÃO: os comandos abaixo apagam as tabelas do laboratório e seus dados.
 IF OBJECT_ID('dbo.Incidente', 'U') IS NOT NULL DROP TABLE dbo.Incidente;
+IF OBJECT_ID('dbo.CentralDeCusto', 'U') IS NOT NULL DROP TABLE dbo.CentralDeCusto;
 IF OBJECT_ID('dbo.Tarefa', 'U') IS NOT NULL DROP TABLE dbo.Tarefa;
 IF OBJECT_ID('dbo.Funcionario', 'U') IS NOT NULL DROP TABLE dbo.Funcionario;
 IF OBJECT_ID('dbo.Departamento', 'U') IS NOT NULL DROP TABLE dbo.Departamento;
@@ -18,6 +19,13 @@ CREATE TABLE dbo.Departamento (
     Codigo INT IDENTITY(1,1) NOT NULL CONSTRAINT PK_Departamento PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
     Sigla VARCHAR(10) NOT NULL
+);
+GO
+
+CREATE TABLE dbo.CentralDeCusto (
+    Codigo INT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CentralDeCusto PRIMARY KEY,
+    NomeCentral VARCHAR(250) NOT NULL,
+    ValorMetaAnual DECIMAL(18,2) NOT NULL CONSTRAINT DF_CentralDeCusto_ValorMetaAnual DEFAULT (0)
 );
 GO
 

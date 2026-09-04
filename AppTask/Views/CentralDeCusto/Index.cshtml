@@ -1,0 +1,71 @@
+@model IEnumerable<AppTask.Models.CentralDeCusto>
+
+@{
+    ViewData["Title"] = "Centrais de custo";
+    var total = Model.Count();
+    var metaTotal = Model.Sum(c => c.ValorMetaAnual);
+}
+
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>Centrais de custo</h1>
+        <p class="text-muted mb-0">Gerencie as metas anuais das centrais de custo.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Nova central
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card-panel">
+            <div class="stat-label"><i class="bi bi-diagram-3"></i> Total de centrais</div>
+            <div class="stat-value">@total</div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card-panel">
+            <div class="stat-label"><i class="bi bi-cash-stack"></i> Meta anual total</div>
+            <div class="stat-value">@metaTotal.ToString("C2", new System.Globalization.CultureInfo("pt-BR"))</div>
+        </div>
+    </div>
+</div>
+
+<div class="card-panel">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome da central</th>
+                    <th>Meta anual</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-4">Nenhuma central de custo cadastrada.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Codigo</td>
+                            <td>@item.NomeCentral</td>
+                            <td>@item.ValorMetaAnual.ToString("C2", new System.Globalization.CultureInfo("pt-BR"))</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Codigo" class="btn btn-primary btn-sm">Alterar</a>
+                                <a asp-action="Details" asp-route-id="@item.Codigo" class="btn btn-success btn-sm text-white">Detalhes</a>
+                                <a asp-action="Delete" asp-route-id="@item.Codigo" class="btn btn-danger btn-sm">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

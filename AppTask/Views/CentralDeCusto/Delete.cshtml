@@ -1,0 +1,32 @@
+@model AppTask.Models.CentralDeCusto
+
+@{
+    ViewData["Title"] = "Excluir central de custo";
+}
+
+<div class="page-header mb-4">
+    <h1>Excluir central de custo</h1>
+</div>
+
+<div class="card-panel">
+    <div class="alert alert-warning">
+        Tem certeza de que deseja excluir esta central de custo?
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-4">Código</dt>
+        <dd class="col-sm-8">@Model.Codigo</dd>
+
+        <dt class="col-sm-4">Nome da central</dt>
+        <dd class="col-sm-8">@Model.NomeCentral</dd>
+
+        <dt class="col-sm-4">Meta anual</dt>
+        <dd class="col-sm-8">@Model.ValorMetaAnual.ToString("C2", new System.Globalization.CultureInfo("pt-BR"))</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Codigo" />
+        <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
